@@ -193,14 +193,13 @@ const Canvas: React.FC<CanvasProps> = ({
 
   return (
     <>
-      <div className="flex justify-end mt-2">
+    <div className=''>
+      <div className="absolute top-2 right-2">
         <button
           onClick={saveCanvasAsImage}
-          className="flex items-center mt-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full"
-        >
-          <Download className="mr-2" />{' '}
-          {/* Add margin-right to space the icon from text */}
-          Save as PNG
+          className="flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full"
+          >
+          <Download /> 
         </button>
       </div>
       <canvas
@@ -211,8 +210,9 @@ const Canvas: React.FC<CanvasProps> = ({
         onMouseUp={stopDrawing}
         onMouseMove={handleMouseMove}
         style={{ cursor: getCursor() }}
-      />
-    </>
+        />
+    </div>
+        </>
   )
 }
 

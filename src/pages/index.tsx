@@ -1,14 +1,14 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Header from '../components/header'
 import Canvas from '../components/canvas'
-import Files from '../components/files'
 import Menu from '../components/menu'
 import Footer from '@/components/footer/Footer'
-import { Trash } from 'lucide-react'
 import ColorPalettePicker from '@/components/colorpicker'
+import Options from '@/components/options'
 
 const PaintHome: React.FC = () => {
   const [tool, setTool] = useState<'pen' | 'eraser'>('pen')
+  const canvasRef = useRef<HTMLCanvasElement>(null) // Move canvasRef to the parent
   const [selectedColor, setSelectedColor] = useState<string>('#000000')
   const [lineWidth, setLineWidth] = useState(5)
   const [erasersize, setErasersize] = useState(20)
@@ -27,6 +27,17 @@ const PaintHome: React.FC = () => {
 
   const handleColorSelect = (color: string) => {
     setSelectedColor(color)
+  }
+
+  const saveCanvasAsImage = () => {
+    const canvas = canvasRef.current
+    if (canvas) {
+      const dataURL = canvas.toDataURL('image/png')
+      const link = document.createElement('a')
+      link.href = dataURL
+      link.download = 'canvas.png' // The file name
+      link.click()
+    }
   }
 
   return (
@@ -63,17 +74,8 @@ const PaintHome: React.FC = () => {
           </div>
         </div>
         <div className="w-3/4 border-2 border-gray-200 rounded-xl h-full bg-white">
-          <div className="flex justify-end mt-2">
-            <button
-              className="flex items-center mt-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full"
-              onClick={handleClearCanvas}
-            >
-              <Trash className="mr-2" />{' '}
-              {/* Add margin to space the icon from text */}
-              Clear
-            </button>
-          </div>
           <Canvas
+
             tool={tool}
             lineWidth={lineWidth}
             erasersize={erasersize}
@@ -83,8 +85,8 @@ const PaintHome: React.FC = () => {
             selectedColor={selectedColor}
           />
         </div>
-        <div className="w-1/5 bg-gradient-to-tr from-[#52438d] to-[#705f97] text-white p-4 rounded-xl">
-          <Files />
+        <div className="w-1/6 bg-gradient-to-tr from-[#52438d] to-[#705f97] text-white p-4 rounded-xl">
+          <Options handleClearCanvas={handleClearCanvas} saveCanvasAsImage={saveCanvasAsImage} /> {/* Pass saveCanvasAsImage */}
         </div>
       </div>
       <Footer />
